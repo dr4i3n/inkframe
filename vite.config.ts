@@ -5,8 +5,6 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    // Repo is served from a subpath on GitHub Pages.
-    base: process.env.GITHUB_PAGES === 'true' ? '/Xteink-Wallpaper-Convertor-and-Optimizer/' : '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

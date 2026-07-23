@@ -12,29 +12,52 @@ export const DEVICES: Record<DeviceType, DeviceConfig> = {
   X4: { width: 480, height: 800 },
 };
 
-export interface ProcessOptions {
+/** Global processing options shared by every image in the batch. */
+export interface GlobalOptions {
   device: DeviceType;
   fitMode: FitMode;
   invert: boolean;
   dither: boolean;
-  scale: number;
+  backgroundFill: BackgroundFill;
+  bitDepth: 8 | 24;
+  brightness: number; // -100..100
+  contrast: number; // -100..100
+}
+
+/** Per-image framing. Each uploaded image keeps its own transform. */
+export interface Adjust {
+  scale: number; // percent
   panX: number;
   panY: number;
-  backgroundFill?: BackgroundFill;
-  bitDepth?: 8 | 24;
+  rotate: number; // 0 | 90 | 180 | 270
 }
+
+export const DEFAULT_ADJUST: Adjust = { scale: 100, panX: 0, panY: 0, rotate: 0 };
 
 export interface ProcessedImage {
   id: string;
   originalName: string;
   dataUrl: string; // PNG for live preview
-  bmpDataUrl: string; // BMP for download
+  bmpBlob: Blob; // BMP for download
+  byteSize: number; // size of the BMP in bytes
+  width: number;
+  height: number;
 }
 
-function encodeBMP(imageData: ImageData, bitDepth: 8 | 24 = 24): string {
+/** Deterministic BMP file size from dimensions + bit depth (no encoding needed). */
+export function bmpByteSize(width: number, height: number, bitDepth: 8 | 24): number {
+  if (bitDepth === 8) {
+    const rowSize = Math.floor((width + 3) / 4) * 4;
+    return 54 + 256 * 4 + rowSize * height;
+  }
+  const rowSize = Math.floor((width * 3 + 3) / 4) * 4;
+  return 54 + rowSize * height;
+}
+
+function encodeBMP(imageData: ImageData, bitDepth: 8 | 24 = 24): Blob {
   const width = imageData.width;
   const height = imageData.height;
-  
+
   if (bitDepth === 8) {
     const rowSize = Math.floor((width + 3) / 4) * 4;
     const pixelArraySize = rowSize * height;
@@ -45,15 +68,15 @@ function encodeBMP(imageData: ImageData, bitDepth: 8 | 24 = 24): string {
     const buffer = new ArrayBuffer(fileSize);
     const view = new DataView(buffer);
 
-    // 1. BMP Header
+    // BMP header
     view.setUint8(0, 0x42); // 'B'
-    view.setUint8(1, 0x4D); // 'M'
+    view.setUint8(1, 0x4d); // 'M'
     view.setUint32(2, fileSize, true);
     view.setUint16(6, 0, true);
     view.setUint16(8, 0, true);
     view.setUint32(10, offset, true);
 
-    // 2. DIB Header (40 bytes)
+    // DIB header (40 bytes)
     view.setUint32(14, 40, true);
     view.setInt32(18, width, true);
     view.setInt32(22, height, true);
@@ -66,32 +89,28 @@ function encodeBMP(imageData: ImageData, bitDepth: 8 | 24 = 24): string {
     view.setUint32(46, 256, true); // Colors in color table
     view.setUint32(50, 256, true); // Important color count
 
-    // Color table (Grayscale)
+    // Grayscale palette
     for (let i = 0; i < 256; i++) {
       const idx = 54 + i * 4;
-      view.setUint8(idx, i);     // B
+      view.setUint8(idx, i); // B
       view.setUint8(idx + 1, i); // G
       view.setUint8(idx + 2, i); // R
       view.setUint8(idx + 3, 0); // Reserved
     }
 
-    // 3. Pixel data
     const data = imageData.data;
     const pixels = new Uint8Array(buffer, offset);
 
     for (let y = 0; y < height; y++) {
       const srcRow = height - 1 - y;
       const dstOffset = y * rowSize;
-      
       for (let x = 0; x < width; x++) {
         const srcPx = (srcRow * width + x) * 4;
-        // Since it's grayscale, R=G=B, just pick one (R)
-        pixels[dstOffset + x] = data[srcPx]; 
+        pixels[dstOffset + x] = data[srcPx]; // grayscale: R=G=B
       }
     }
 
-    const blob = new Blob([buffer], { type: 'image/bmp' });
-    return URL.createObjectURL(blob);
+    return new Blob([buffer], { type: 'image/bmp' });
   }
 
   // 24-bit encoding
@@ -102,191 +121,228 @@ function encodeBMP(imageData: ImageData, bitDepth: 8 | 24 = 24): string {
   const buffer = new ArrayBuffer(fileSize);
   const view = new DataView(buffer);
 
-  // 1. BMP Header (14 bytes)
+  // BMP header (14 bytes)
   view.setUint8(0, 0x42); // 'B'
-  view.setUint8(1, 0x4D); // 'M'
-  view.setUint32(2, fileSize, true); // File size
-  view.setUint16(6, 0, true); // Reserved
-  view.setUint16(8, 0, true); // Reserved
-  view.setUint32(10, 54, true); // Pixel data offset
+  view.setUint8(1, 0x4d); // 'M'
+  view.setUint32(2, fileSize, true);
+  view.setUint16(6, 0, true);
+  view.setUint16(8, 0, true);
+  view.setUint32(10, 54, true);
 
-  // 2. DIB Header (40 bytes)
-  view.setUint32(14, 40, true); // DIB header size
-  view.setInt32(18, width, true); // Width
-  view.setInt32(22, height, true); // Height
-  view.setUint16(26, 1, true); // Color planes
-  view.setUint16(28, 24, true); // Bits per pixel (24)
-  view.setUint32(30, 0, true); // Compression (0 = none)
-  view.setUint32(34, pixelArraySize, true); // Image size
-  view.setInt32(38, 2835, true); // Horizontal resolution
-  view.setInt32(42, 2835, true); // Vertical resolution
-  view.setUint32(46, 0, true); // Colors in color table
-  view.setUint32(50, 0, true); // Important color count
+  // DIB header (40 bytes)
+  view.setUint32(14, 40, true);
+  view.setInt32(18, width, true);
+  view.setInt32(22, height, true);
+  view.setUint16(26, 1, true);
+  view.setUint16(28, 24, true);
+  view.setUint32(30, 0, true);
+  view.setUint32(34, pixelArraySize, true);
+  view.setInt32(38, 2835, true);
+  view.setInt32(42, 2835, true);
+  view.setUint32(46, 0, true);
+  view.setUint32(50, 0, true);
 
-  // 3. Pixel data
   const data = imageData.data;
   const pixels = new Uint8Array(buffer, 54);
 
   for (let y = 0; y < height; y++) {
-    const srcRow = height - 1 - y; // Bottom-up
+    const srcRow = height - 1 - y; // bottom-up
     const dstOffset = y * rowSize;
-
     for (let x = 0; x < width; x++) {
       const srcPx = (srcRow * width + x) * 4;
       const dstPx = dstOffset + x * 3;
-      
-      // BMP is BGR order
-      pixels[dstPx] = data[srcPx + 2];     // B
+      pixels[dstPx] = data[srcPx + 2]; // B
       pixels[dstPx + 1] = data[srcPx + 1]; // G
-      pixels[dstPx + 2] = data[srcPx];     // R
+      pixels[dstPx + 2] = data[srcPx]; // R
     }
   }
 
-  const blob = new Blob([buffer], { type: 'image/bmp' });
-  return URL.createObjectURL(blob);
+  return new Blob([buffer], { type: 'image/bmp' });
 }
 
-export const processImage = async (file: File, options: ProcessOptions): Promise<ProcessedImage> => {
+/** Render the source rotated onto an offscreen canvas so the rest of the
+ *  pipeline can treat it as a plain image with swapped dimensions. */
+function rotateSource(
+  img: HTMLImageElement,
+  rotate: number,
+): { source: CanvasImageSource; w: number; h: number } {
+  const rot = ((rotate % 360) + 360) % 360;
+  if (rot === 0) return { source: img, w: img.width, h: img.height };
+
+  const swap = rot === 90 || rot === 270;
+  const w = swap ? img.height : img.width;
+  const h = swap ? img.width : img.height;
+
+  const c = document.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  const rc = c.getContext('2d')!;
+  rc.translate(w / 2, h / 2);
+  rc.rotate((rot * Math.PI) / 180);
+  rc.drawImage(img, -img.width / 2, -img.height / 2);
+  return { source: c, w, h };
+}
+
+function renderImageData(img: HTMLImageElement, options: GlobalOptions, adjust: Adjust): ImageData {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d')!;
+
+  const { width, height } = DEVICES[options.device];
+  canvas.width = width;
+  canvas.height = height;
+
+  const { source, w: sw, h: sh } = rotateSource(img, adjust.rotate);
+
+  const imgAspect = sw / sh;
+  const canvasAspect = width / height;
+
+  let drawW = width;
+  let drawH = height;
+
+  if (options.fitMode === 'cover') {
+    if (imgAspect > canvasAspect) {
+      drawH = height;
+      drawW = sw * (height / sh);
+    } else {
+      drawW = width;
+      drawH = sh * (width / sw);
+    }
+  } else {
+    if (imgAspect > canvasAspect) {
+      drawW = width;
+      drawH = sh * (width / sw);
+    } else {
+      drawH = height;
+      drawW = sw * (height / sh);
+    }
+  }
+
+  const scaleMultiplier = (adjust.scale ?? 100) / 100;
+  drawW *= scaleMultiplier;
+  drawH *= scaleMultiplier;
+
+  const panX = adjust.panX || 0;
+  const panY = adjust.panY || 0;
+  const offsetX = (width - drawW) / 2 + panX;
+  const offsetY = (height - drawH) / 2 + panY;
+
+  if (options.backgroundFill !== 'mirror') {
+    ctx.fillStyle = options.backgroundFill === 'black' ? '#000000' : '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+  }
+
+  if (options.backgroundFill === 'mirror') {
+    const startCol = Math.floor(-offsetX / drawW);
+    const endCol = Math.floor((width - offsetX) / drawW);
+    const startRow = Math.floor(-offsetY / drawH);
+    const endRow = Math.floor((height - offsetY) / drawH);
+
+    for (let row = startRow; row <= endRow; row++) {
+      for (let col = startCol; col <= endCol; col++) {
+        const x = offsetX + col * drawW;
+        const y = offsetY + row * drawH;
+        const flipX = Math.abs(col) % 2 === 1;
+        const flipY = Math.abs(row) % 2 === 1;
+
+        ctx.save();
+        ctx.translate(x + (flipX ? drawW : 0), y + (flipY ? drawH : 0));
+        ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+        ctx.drawImage(source, 0, 0, drawW, drawH);
+        ctx.restore();
+      }
+    }
+  } else {
+    ctx.drawImage(source, offsetX, offsetY, drawW, drawH);
+  }
+
+  const imageData = ctx.getImageData(0, 0, width, height);
+  const data = imageData.data;
+
+  // Brightness / contrast factors.
+  const brightness = (options.brightness || 0) * 1.28; // -128..128
+  const c = (options.contrast || 0) * 2.55; // -255..255
+  const contrastFactor = (259 * (c + 255)) / (255 * (259 - c));
+
+  // Grayscale buffer (float, so dithering keeps full precision).
+  const gray = new Float32Array(width * height);
+  for (let i = 0, p = 0; i < data.length; i += 4, p++) {
+    let g = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+    g = contrastFactor * (g - 128) + 128 + brightness;
+    if (options.invert) g = 255 - g;
+    gray[p] = g; // left unclamped for accurate error diffusion
+  }
+
+  if (options.dither) {
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const idx = y * width + x;
+        const oldPixel = gray[idx];
+        const newPixel = oldPixel < 128 ? 0 : 255;
+        gray[idx] = newPixel;
+        const err = oldPixel - newPixel;
+
+        if (x + 1 < width) gray[idx + 1] += (err * 7) / 16;
+        if (y + 1 < height) {
+          if (x - 1 >= 0) gray[idx + width - 1] += (err * 3) / 16;
+          gray[idx + width] += (err * 5) / 16;
+          if (x + 1 < width) gray[idx + width + 1] += (err * 1) / 16;
+        }
+      }
+    }
+  }
+
+  // Write back, clamping once at the end.
+  for (let p = 0, i = 0; p < gray.length; p++, i += 4) {
+    const v = gray[p] < 0 ? 0 : gray[p] > 255 ? 255 : gray[p];
+    data[i] = v;
+    data[i + 1] = v;
+    data[i + 2] = v;
+    data[i + 3] = 255;
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+  return imageData;
+}
+
+export const processImage = async (
+  file: File,
+  options: GlobalOptions,
+  adjust: Adjust,
+): Promise<Omit<ProcessedImage, 'id'>> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const url = URL.createObjectURL(file);
-    
+
     img.onload = () => {
       URL.revokeObjectURL(url);
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return reject(new Error('Canvas 2D context not available'));
+      try {
+        const { width, height } = DEVICES[options.device];
+        const imageData = renderImageData(img, options, adjust);
+        const bmpBlob = encodeBMP(imageData, options.bitDepth);
 
-      const { width, height } = DEVICES[options.device];
-      canvas.width = width;
-      canvas.height = height;
+        // Preview PNG via a throwaway canvas.
+        const previewCanvas = document.createElement('canvas');
+        previewCanvas.width = width;
+        previewCanvas.height = height;
+        previewCanvas.getContext('2d')!.putImageData(imageData, 0, 0);
 
-      // Calculate drawing dimensions based on fitMode
-      let drawW = width;
-      let drawH = height;
-
-      const imgAspect = img.width / img.height;
-      const canvasAspect = width / height;
-
-      if (options.fitMode === 'cover') {
-        if (imgAspect > canvasAspect) {
-          drawH = height;
-          drawW = img.width * (height / img.height);
-        } else {
-          drawW = width;
-          drawH = img.height * (width / img.width);
-        }
-      } else { // contain
-        if (imgAspect > canvasAspect) {
-          drawW = width;
-          drawH = img.height * (width / img.width);
-        } else {
-          drawH = height;
-          drawW = img.width * (height / img.height);
-        }
+        resolve({
+          originalName: file.name,
+          dataUrl: previewCanvas.toDataURL('image/png'),
+          bmpBlob,
+          byteSize: bmpBlob.size,
+          width,
+          height,
+        });
+      } catch (err) {
+        reject(err instanceof Error ? err : new Error('Processing failed'));
       }
-
-      // Apply scale
-      const scaleMultiplier = (options.scale ?? 100) / 100;
-      drawW *= scaleMultiplier;
-      drawH *= scaleMultiplier;
-
-      // Center image and apply pan offsets
-      const panX = options.panX || 0;
-      const panY = options.panY || 0;
-      const offsetX = (width - drawW) / 2 + panX;
-      const offsetY = (height - drawH) / 2 + panY;
-
-      // Handle background fill
-      if (options.backgroundFill !== 'mirror') {
-        ctx.fillStyle = options.backgroundFill === 'black' ? '#000000' : '#ffffff';
-        ctx.fillRect(0, 0, width, height);
-      }
-
-      if (options.backgroundFill === 'mirror') {
-        const startCol = Math.floor(-offsetX / drawW);
-        const endCol = Math.floor((width - offsetX) / drawW);
-        const startRow = Math.floor(-offsetY / drawH);
-        const endRow = Math.floor((height - offsetY) / drawH);
-
-        for (let row = startRow; row <= endRow; row++) {
-          for (let col = startCol; col <= endCol; col++) {
-            const x = offsetX + col * drawW;
-            const y = offsetY + row * drawH;
-            const flipX = Math.abs(col) % 2 === 1;
-            const flipY = Math.abs(row) % 2 === 1;
-            
-            ctx.save();
-            ctx.translate(x + (flipX ? drawW : 0), y + (flipY ? drawH : 0));
-            ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
-            ctx.drawImage(img, 0, 0, drawW, drawH);
-            ctx.restore();
-          }
-        }
-      } else {
-        ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
-      }
-
-      // Process pixels
-      const imageData = ctx.getImageData(0, 0, width, height);
-      const data = imageData.data;
-
-      // First pass: grayscale and invert
-      for (let i = 0; i < data.length; i += 4) {
-        // Luminance formula
-        let gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-        if (options.invert) {
-          gray = 255 - gray;
-        }
-        data[i] = gray;
-        data[i + 1] = gray;
-        data[i + 2] = gray;
-      }
-
-      // Optional: Dithering (Floyd-Steinberg for pure B&W effect)
-      if (options.dither) {
-        for (let y = 0; y < height; y++) {
-          for (let x = 0; x < width; x++) {
-            const idx = (y * width + x) * 4;
-            const oldPixel = data[idx];
-            // Threshold at 128
-            const newPixel = oldPixel < 128 ? 0 : 255;
-            data[idx] = newPixel;
-            data[idx + 1] = newPixel;
-            data[idx + 2] = newPixel;
-            
-            const quantError = oldPixel - newPixel;
-
-            const distributeError = (ox: number, oy: number, ratio: number) => {
-              if (x + ox >= 0 && x + ox < width && y + oy >= 0 && y + oy < height) {
-                const offset = ((y + oy) * width + (x + ox)) * 4;
-                const newCol = data[offset] + quantError * ratio;
-                const clamped = Math.min(255, Math.max(0, newCol));
-                data[offset] = clamped;
-                data[offset + 1] = clamped;
-                data[offset + 2] = clamped;
-              }
-            };
-
-            distributeError(1, 0, 7 / 16);
-            distributeError(-1, 1, 3 / 16);
-            distributeError(0, 1, 5 / 16);
-            distributeError(1, 1, 1 / 16);
-          }
-        }
-      }
-
-      ctx.putImageData(imageData, 0, 0);
-      
-      resolve({
-        id: Math.random().toString(36).substring(2, 9),
-        originalName: file.name,
-        dataUrl: canvas.toDataURL('image/png'),
-        bmpDataUrl: encodeBMP(imageData, options.bitDepth || 24)
-      });
     };
-    
-    img.onerror = () => reject(new Error('Failed to load image'));
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Failed to load image'));
+    };
     img.src = url;
   });
 };
