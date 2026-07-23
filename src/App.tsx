@@ -254,8 +254,8 @@ const getInitialLang = (): Language => {
     const saved = localStorage.getItem('eink-lang') as Language | null;
     if (saved && LANGS.includes(saved)) return saved;
   } catch { /* ignore */ }
-  const nav = (navigator.language || 'en').slice(0, 2).toUpperCase() as Language;
-  return LANGS.includes(nav) ? nav : 'EN';
+  // Default to English; a manual switch is remembered in localStorage.
+  return 'EN';
 };
 
 const formatBytes = (bytes: number): string => {
@@ -265,7 +265,7 @@ const formatBytes = (bytes: number): string => {
 };
 
 const ControlGroup = ({ label, children }: { label: string, children: React.ReactNode }) => (
-  <div className="space-y-3">
+  <div className="space-y-2">
     <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">{label}</div>
     {children}
   </div>
@@ -445,7 +445,7 @@ export default function App() {
   const validCount = results.filter(r => r.bmpBlob).length;
 
   const toggleBtn = (active: boolean) =>
-    `p-3 text-xs font-mono tracking-wider uppercase transition-all border rounded-xl ${
+    `p-2.5 text-xs font-mono tracking-wider uppercase transition-all border rounded-xl ${
       active
         ? 'bg-zinc-100 text-black border-zinc-100 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
         : 'bg-zinc-950 text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200 hover:bg-zinc-900'
@@ -515,8 +515,8 @@ export default function App() {
         <div className="flex-1 flex flex-col lg:flex-row gap-6 min-h-0">
 
           {/* Left Column: Settings */}
-          <div className="w-full lg:w-[320px] flex flex-col gap-8 shrink-0 lg:overflow-y-auto custom-scrollbar bg-[#111] border border-zinc-800 rounded-2xl p-6 shadow-lg">
-            <div className="flex items-center gap-3 text-white border-b border-zinc-800 pb-4">
+          <div className="w-full lg:w-[320px] flex flex-col gap-4 shrink-0 lg:overflow-y-auto custom-scrollbar bg-[#111] border border-zinc-800 rounded-2xl p-5 shadow-lg">
+            <div className="flex items-center gap-3 text-white border-b border-zinc-800 pb-3">
               <Settings className="w-5 h-5 text-zinc-400" strokeWidth={1.5} />
               <h2 className="font-mono text-xs uppercase tracking-widest font-semibold">{t.settings}</h2>
             </div>
@@ -527,7 +527,7 @@ export default function App() {
                   <button
                     key={dev}
                     onClick={() => setOptions({ ...options, device: dev })}
-                    className={`p-3 text-left transition-all border rounded-xl ${
+                    className={`p-2.5 text-left transition-all border rounded-xl ${
                       options.device === dev
                         ? 'bg-zinc-100 text-black border-zinc-100 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
                         : 'bg-zinc-950 text-zinc-400 border-zinc-700 hover:border-zinc-500 hover:text-zinc-200 hover:bg-zinc-900'
@@ -578,7 +578,7 @@ export default function App() {
 
             {/* Brightness / Contrast */}
             <ControlGroup label={`${t.brightness} / ${t.contrast}`}>
-              <div className="p-5 border border-zinc-700 bg-zinc-950 rounded-xl flex flex-col gap-4">
+              <div className="p-4 border border-zinc-700 bg-zinc-950 rounded-xl flex flex-col gap-3">
                 <SliderRow label={t.brightness} value={options.brightness} min={-100} max={100}
                   onChange={(v) => setOptions({ ...options, brightness: v })} />
                 <SliderRow label={t.contrast} value={options.contrast} min={-100} max={100}
@@ -587,11 +587,11 @@ export default function App() {
             </ControlGroup>
 
             <ControlGroup label={t.filters}>
-              <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => setOptions({ ...options, invert: !options.invert })}
                   aria-pressed={options.invert}
-                  className={`flex items-center justify-between p-4 border rounded-xl text-xs font-mono tracking-wider transition-colors ${
+                  className={`flex items-center justify-between p-3 border rounded-xl text-xs font-mono tracking-wider transition-colors ${
                     options.invert ? 'bg-zinc-100 border-zinc-100 text-black shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'bg-zinc-950 border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 hover:bg-zinc-900'
                   }`}
                 >
@@ -601,7 +601,7 @@ export default function App() {
                 <button
                   onClick={() => setOptions({ ...options, dither: !options.dither })}
                   aria-pressed={options.dither}
-                  className={`flex items-center justify-between p-4 border rounded-xl text-xs font-mono tracking-wider transition-colors ${
+                  className={`flex items-center justify-between p-3 border rounded-xl text-xs font-mono tracking-wider transition-colors ${
                     options.dither ? 'bg-zinc-100 border-zinc-100 text-black shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'bg-zinc-950 border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 hover:bg-zinc-900'
                   }`}
                 >
@@ -613,7 +613,7 @@ export default function App() {
 
             {/* Per-image framing */}
             <ControlGroup label={t.framing}>
-              <div className={`p-5 border border-zinc-700 bg-zinc-950 rounded-xl flex flex-col gap-4 ${selectedSource ? '' : 'opacity-40 pointer-events-none'}`}>
+              <div className={`p-4 border border-zinc-700 bg-zinc-950 rounded-xl flex flex-col gap-3 ${selectedSource ? '' : 'opacity-40 pointer-events-none'}`}>
                 {/* Rotation */}
                 <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
                   <span>{t.rotate}</span>
