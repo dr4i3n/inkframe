@@ -18,11 +18,11 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Drop images here or click to browse", processing: "Processing…",
     downloadAll: "ZIP", downloadBmp: "Download BMP", awaitingSignal: "Drop an image to begin",
     incomingStream: "Drop to import", releaseToProcess: "Release to process", bitDepth: "Format",
-    hintTone: "Brightness, contrast and gamma. 'Auto contrast' stretches the histogram to use the full range — great for flat, low-contrast e-ink.",
-    hintOutput: "How the final grayscale is built. 'Grays' = how many shades of gray; 'Dither' = pattern used to fake extra shades.",
-    hintLevels: "Number of gray shades in the export. Fewer looks posterized with more contrast; 16 matches most e-ink panels; Full = 256 shades.",
-    hintDither: "Dithering fakes extra shades with tiny dot patterns to avoid banding. Off = flat; F-S = detailed; Atk = clean, e-ink friendly; Bayer = retro grid.",
-    hintInvert: "Swaps light and dark — for white-on-black wallpapers.",
+    hintTone: "Rescues a flat or dark image before export. Auto contrast automatically pins the darkest tone to black and the lightest to white; Gamma brightens or darkens the midtones; Brightness and Contrast are manual fine-tuning.",
+    hintOutput: "Builds the final black-and-white image: how many shades of gray it keeps, and the dot pattern used to simulate the shades in between.",
+    hintLevels: "Shades of gray in the export. Xteink screens show 16 shades — so 16 is the sweet spot and previews exactly like the device. 4 or 2 give a bold, posterized look. Full (256) lets the reader convert it itself.",
+    hintDither: "Simulates in-between shades with tiny dot patterns so photos look smooth instead of striped. Off = flat blocks (best for logos and text). F-S = sharp and detailed. Atkinson = cleaner with more punch, the classic e-ink look. Bayer = even retro grid.",
+    hintInvert: "Swaps light and dark — for a dark-themed wallpaper, or to fix a scan that came out as a negative.",
     pan: "Move",
   },
   CS: {
@@ -35,11 +35,11 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Přetáhni obrázky sem nebo klikni", processing: "Zpracovávám…",
     downloadAll: "ZIP", downloadBmp: "Stáhnout BMP", awaitingSignal: "Začni přetažením obrázku",
     incomingStream: "Pusť pro import", releaseToProcess: "Pusť pro zpracování", bitDepth: "Formát",
-    hintTone: "Jas, kontrast a gama. „Auto kontrast“ roztáhne histogram na plný rozsah — ideální pro plochý, málo kontrastní e-ink.",
-    hintOutput: "Jak se sestaví finální šeď. „Odstíny“ = kolik stupňů šedi; „Dither“ = vzor, kterým se předstírají další odstíny.",
-    hintLevels: "Kolik odstínů šedi bude ve výstupu. Míň = plakátový vzhled s vyšším kontrastem; 16 odpovídá většině e-ink displejů; Plné = 256 odstínů.",
-    hintDither: "Dithering předstírá další odstíny drobným rozptylem bodů a brání pruhování. Vyp = plochý; F-S = detailní; ATK = čistý, vhodný pro e-ink; Bayer = retro rastr.",
-    hintInvert: "Prohodí světlou a tmavou — pro tapety bílá na černé.",
+    hintTone: "Vytáhne plochý nebo tmavý obrázek před exportem. Auto kontrast automaticky posadí nejtmavší tón na černou a nejsvětlejší na bílou; Gama zesvětlí nebo ztmaví střední tóny; Jas a Kontrast jsou ruční doladění.",
+    hintOutput: "Sestaví finální černobílý obrázek: kolik odstínů šedi si nechá a jakým vzorem bodů se dopočítají mezistupně.",
+    hintLevels: "Kolik odstínů šedi má výstup. Displeje Xteink zobrazí 16 odstínů — proto je 16 ideál a náhled vypadá přesně jako na čtečce. 4 nebo 2 dají výrazný, plakátový vzhled. Plné (256) nechá převod na čtečce.",
+    hintDither: "Dopočítá mezistupně drobným rozptylem bodů, aby fotky byly plynulé a ne pruhované. Vyp = ploché plochy (ideál pro loga a text). F-S = ostrý, detailní. Atkinson = čistší a údernější, klasický e-ink vzhled. Bayer = pravidelný retro rastr.",
+    hintInvert: "Prohodí světlou a tmavou — pro tapetu v tmavém motivu, nebo když sken vyšel jako negativ.",
     pan: "Posun",
   },
   DE: {
@@ -52,11 +52,11 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Bilder hierher ziehen oder klicken", processing: "Verarbeitung…",
     downloadAll: "ZIP", downloadBmp: "BMP laden", awaitingSignal: "Bild ablegen zum Start",
     incomingStream: "Zum Importieren ablegen", releaseToProcess: "Loslassen zum Verarbeiten", bitDepth: "Format",
-    hintTone: "Helligkeit, Kontrast und Gamma. „Auto-Kontrast“ dehnt das Histogramm auf den vollen Bereich — ideal für flaches, kontrastarmes E-Ink.",
-    hintOutput: "Wie das finale Graustufenbild entsteht. „Graustufen“ = Anzahl der Grautöne; „Dither“ = Muster für zusätzliche Töne.",
-    hintLevels: "Anzahl der Grautöne im Export. Weniger wirkt plakativ mit mehr Kontrast; 16 passt zu den meisten E-Ink-Panels; Voll = 256 Töne.",
-    hintDither: "Dithering täuscht zusätzliche Töne mit Punktmustern vor und vermeidet Streifen. Aus = flach; F-S = detailliert; Atk = sauber, E-Ink-freundlich; Bayer = Retro-Raster.",
-    hintInvert: "Vertauscht Hell und Dunkel — für Weiß-auf-Schwarz-Hintergründe.",
+    hintTone: "Hebt ein flaches oder dunkles Bild vor dem Export an. Auto-Kontrast setzt automatisch den dunkelsten Ton auf Schwarz und den hellsten auf Weiß; Gamma hellt die Mitteltöne auf oder ab; Helligkeit und Kontrast sind manuelle Feinabstimmung.",
+    hintOutput: "Erzeugt das finale Schwarz-Weiß-Bild: wie viele Graustufen es behält und mit welchem Punktmuster die Zwischentöne simuliert werden.",
+    hintLevels: "Graustufen im Export. Xteink-Displays zeigen 16 Stufen — daher ist 16 optimal und die Vorschau sieht genau wie am Gerät aus. 4 oder 2 wirken plakativ. Voll (256) überlässt die Umwandlung dem Reader.",
+    hintDither: "Simuliert Zwischentöne mit feinen Punktmustern, damit Fotos glatt statt streifig wirken. Aus = flache Flächen (ideal für Logos und Text). F-S = scharf, detailliert. Atkinson = sauberer mit mehr Kontrast, der klassische E-Ink-Look. Bayer = gleichmäßiges Retro-Raster.",
+    hintInvert: "Vertauscht Hell und Dunkel — für ein dunkles Wallpaper oder um einen negativen Scan zu korrigieren.",
     pan: "Verschieben",
   },
   ES: {
@@ -69,11 +69,11 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Arrastra imágenes o haz clic", processing: "Procesando…",
     downloadAll: "ZIP", downloadBmp: "Descargar BMP", awaitingSignal: "Suelta una imagen para empezar",
     incomingStream: "Suelta para importar", releaseToProcess: "Suelta para procesar", bitDepth: "Formato",
-    hintTone: "Brillo, contraste y gama. «Auto contraste» estira el histograma a todo el rango — ideal para e-ink plano y de bajo contraste.",
-    hintOutput: "Cómo se construye la escala de grises final. «Grises» = cuántos tonos de gris; «Dither» = patrón para simular tonos extra.",
-    hintLevels: "Número de tonos de gris en la exportación. Menos da aspecto posterizado con más contraste; 16 coincide con la mayoría de e-ink; Completo = 256 tonos.",
-    hintDither: "El tramado simula tonos extra con patrones de puntos para evitar bandas. No = plano; F-S = detallado; Atk = limpio, ideal e-ink; Bayer = rejilla retro.",
-    hintInvert: "Intercambia claro y oscuro — para fondos blanco sobre negro.",
+    hintTone: "Recupera una imagen plana u oscura antes de exportar. Auto contraste lleva el tono más oscuro a negro y el más claro a blanco automáticamente; Gama aclara u oscurece los medios tonos; Brillo y Contraste son ajuste manual.",
+    hintOutput: "Crea la imagen final en blanco y negro: cuántos tonos de gris conserva y el patrón de puntos que simula los tonos intermedios.",
+    hintLevels: "Tonos de gris en la exportación. Las pantallas Xteink muestran 16 tonos — por eso 16 es lo ideal y la vista previa se ve igual que en el dispositivo. 4 o 2 dan un aspecto posterizado. Completo (256) deja la conversión al lector.",
+    hintDither: "Simula tonos intermedios con patrones de puntos para que las fotos se vean suaves y no a franjas. No = bloques planos (ideal para logos y texto). F-S = nítido y detallado. Atkinson = más limpio y con más fuerza, el look clásico e-ink. Bayer = rejilla retro uniforme.",
+    hintInvert: "Intercambia claro y oscuro — para un fondo oscuro o para corregir un escaneo en negativo.",
     pan: "Mover",
   },
   FR: {
@@ -86,11 +86,11 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Glissez des images ou cliquez", processing: "Traitement…",
     downloadAll: "ZIP", downloadBmp: "Télécharger BMP", awaitingSignal: "Déposez une image pour commencer",
     incomingStream: "Déposez pour importer", releaseToProcess: "Relâchez pour traiter", bitDepth: "Format",
-    hintTone: "Luminosité, contraste et gamma. « Auto contraste » étire l'histogramme sur toute la plage — idéal pour un e-ink plat et peu contrasté.",
-    hintOutput: "Comment le gris final est construit. « Gris » = nombre de niveaux de gris ; « Dither » = motif pour simuler des tons supplémentaires.",
-    hintLevels: "Nombre de niveaux de gris à l'export. Moins donne un rendu postérisé plus contrasté ; 16 correspond à la plupart des e-ink ; Complet = 256 tons.",
-    hintDither: "Le tramage simule des tons via des motifs de points pour éviter les bandes. Non = plat ; F-S = détaillé ; Atk = propre, adapté e-ink ; Bayer = grille rétro.",
-    hintInvert: "Inverse clair et foncé — pour les fonds blanc sur noir.",
+    hintTone: "Récupère une image plate ou sombre avant l'export. Auto contraste place le ton le plus foncé sur le noir et le plus clair sur le blanc automatiquement ; Gamma éclaircit ou assombrit les tons moyens ; Luminosité et Contraste sont un réglage manuel.",
+    hintOutput: "Construit l'image finale en noir et blanc : combien de niveaux de gris elle conserve et le motif de points qui simule les tons intermédiaires.",
+    hintLevels: "Niveaux de gris à l'export. Les écrans Xteink affichent 16 niveaux — donc 16 est idéal et l'aperçu ressemble exactement à l'appareil. 4 ou 2 donnent un rendu postérisé. Complet (256) laisse la conversion au lecteur.",
+    hintDither: "Simule des tons intermédiaires avec de petits motifs de points pour que les photos soient lisses et non striées. Non = aplats (idéal pour logos et texte). F-S = net et détaillé. Atkinson = plus propre et contrasté, le look e-ink classique. Bayer = grille rétro régulière.",
+    hintInvert: "Inverse clair et foncé — pour un fond sombre ou corriger un scan en négatif.",
     pan: "Déplacer",
   },
   ZH: {
@@ -103,11 +103,11 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "拖入图片或点击选择", processing: "处理中…",
     downloadAll: "ZIP", downloadBmp: "下载 BMP", awaitingSignal: "拖入图片开始",
     incomingStream: "松开以导入", releaseToProcess: "松开以处理", bitDepth: "格式",
-    hintTone: "亮度、对比度和伽马。“自动对比”会把直方图拉伸到全范围——非常适合平淡、低对比的电子墨水屏。",
-    hintOutput: "最终灰度的生成方式。“灰阶”=灰色层级数量；“抖动”=用来模拟额外层级的图案。",
-    hintLevels: "导出图片的灰色层级数。越少越像海报化、对比更强；16 对应多数电子墨水屏；完整=256 级。",
-    hintDither: "抖动用细小点阵模拟更多层级，避免色带。关=平淡；F-S=细腻；Atk=干净、适合电子墨水；Bayer=复古网格。",
-    hintInvert: "黑白互换——用于白底黑字的壁纸。",
+    hintTone: "导出前提亮平淡或偏暗的图片。自动对比会自动把最暗的色调压到纯黑、最亮的提到纯白；伽马提亮或压暗中间调；亮度和对比度用于手动微调。",
+    hintOutput: "生成最终的黑白图像：保留多少灰阶，以及用什么点阵图案模拟中间色调。",
+    hintLevels: "导出图片的灰阶数量。Xteink 屏幕显示 16 级灰阶——所以 16 最合适，预览与设备完全一致。4 或 2 会得到海报化的强对比。完整（256）则让阅读器自己转换。",
+    hintDither: "用细小点阵模拟中间色调，让照片平滑而不出现条带。关=平涂色块（适合徽标和文字）。F-S=锐利、细节多。Atkinson=更干净、更有力，经典电子墨水风格。Bayer=均匀的复古网格。",
+    hintInvert: "黑白互换——用于深色壁纸，或修正扫描出的负片。",
     pan: "移动",
   }
 };
@@ -468,7 +468,12 @@ export default function App() {
             <Field label={t.output} hint={t.hintOutput}>
               <div className="space-y-2.5">
                 <Segmented value={String(options.grayLevels)} onChange={(v) => setOptions({ ...options, grayLevels: parseInt(v) })}
-                  options={[{ value: '256', label: t.full, title: t.hintLevels }, { value: '16', label: '16', title: t.hintLevels }, { value: '4', label: '4', title: t.hintLevels }, { value: '2', label: '2', title: t.hintLevels }]} />
+                  options={[
+                    { value: '256', label: t.full, title: t.hintLevels },
+                    { value: '16', label: <span className="flex items-center gap-1">16<span className="w-1.5 h-1.5 rounded-full bg-amber-500" /></span>, title: `★ ${t.hintLevels}` },
+                    { value: '4', label: '4', title: t.hintLevels },
+                    { value: '2', label: '2', title: t.hintLevels },
+                  ]} />
                 <Segmented value={options.ditherMode} onChange={(v) => setOptions({ ...options, ditherMode: v as DitherMode })}
                   options={[{ value: 'none', label: t.off, title: t.hintDither }, { value: 'floyd', label: 'F-S', title: t.hintDither }, { value: 'atkinson', label: 'Atk', title: t.hintDither }, { value: 'bayer', label: 'Bayer', title: t.hintDither }]} />
                 <button title={t.hintInvert} onClick={() => setOptions({ ...options, invert: !options.invert })} aria-pressed={options.invert}
