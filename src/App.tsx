@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { UploadCloud, Download, Trash2, Crosshair, Plus, Terminal, Sliders, Globe, Coffee, RotateCcw, RotateCw, AlertTriangle, FileArchive, ZoomIn, Sparkles, Copy, Eye, Sun, Moon } from 'lucide-react';
+import { UploadCloud, Download, Trash2, Crosshair, Plus, Terminal, Sliders, Globe, Coffee, RotateCcw, RotateCw, AlertTriangle, FileArchive, ZoomIn, Sparkles, Copy, Eye, Sun, Moon, HelpCircle, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
 import { processImage, GlobalOptions, ProcessedImage, DeviceType, DEVICES, Adjust, DEFAULT_ADJUST, DitherMode } from './lib/imageProcessor';
 import { createZip } from './lib/zip';
 
@@ -18,6 +18,12 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Drop images here or click to browse", processing: "Processing…",
     downloadAll: "ZIP", downloadBmp: "Download BMP", awaitingSignal: "Drop an image to begin",
     incomingStream: "Drop to import", releaseToProcess: "Release to process", bitDepth: "Format",
+    hintTone: "Brightness, contrast and gamma. 'Auto contrast' stretches the histogram to use the full range — great for flat, low-contrast e-ink.",
+    hintOutput: "How the final grayscale is built. 'Grays' = how many shades of gray; 'Dither' = pattern used to fake extra shades.",
+    hintLevels: "Number of gray shades in the export. Fewer looks posterized with more contrast; 16 matches most e-ink panels; Full = 256 shades.",
+    hintDither: "Dithering fakes extra shades with tiny dot patterns to avoid banding. Off = flat; F-S = detailed; Atk = clean, e-ink friendly; Bayer = retro grid.",
+    hintInvert: "Swaps light and dark — for white-on-black wallpapers.",
+    pan: "Move",
   },
   CS: {
     title: "InkFrame", settings: "Nastavení", targetDevice: "Cílové zařízení", fillMode: "Vyplnění",
@@ -29,6 +35,12 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Přetáhni obrázky sem nebo klikni", processing: "Zpracovávám…",
     downloadAll: "ZIP", downloadBmp: "Stáhnout BMP", awaitingSignal: "Začni přetažením obrázku",
     incomingStream: "Pusť pro import", releaseToProcess: "Pusť pro zpracování", bitDepth: "Formát",
+    hintTone: "Jas, kontrast a gama. „Auto kontrast“ roztáhne histogram na plný rozsah — ideální pro plochý, málo kontrastní e-ink.",
+    hintOutput: "Jak se sestaví finální šeď. „Odstíny“ = kolik stupňů šedi; „Dither“ = vzor, kterým se předstírají další odstíny.",
+    hintLevels: "Kolik odstínů šedi bude ve výstupu. Míň = plakátový vzhled s vyšším kontrastem; 16 odpovídá většině e-ink displejů; Plné = 256 odstínů.",
+    hintDither: "Dithering předstírá další odstíny drobným rozptylem bodů a brání pruhování. Vyp = plochý; F-S = detailní; ATK = čistý, vhodný pro e-ink; Bayer = retro rastr.",
+    hintInvert: "Prohodí světlou a tmavou — pro tapety bílá na černé.",
+    pan: "Posun",
   },
   DE: {
     title: "InkFrame", settings: "Einstellungen", targetDevice: "Zielgerät", fillMode: "Skalierung",
@@ -40,6 +52,12 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Bilder hierher ziehen oder klicken", processing: "Verarbeitung…",
     downloadAll: "ZIP", downloadBmp: "BMP laden", awaitingSignal: "Bild ablegen zum Start",
     incomingStream: "Zum Importieren ablegen", releaseToProcess: "Loslassen zum Verarbeiten", bitDepth: "Format",
+    hintTone: "Helligkeit, Kontrast und Gamma. „Auto-Kontrast“ dehnt das Histogramm auf den vollen Bereich — ideal für flaches, kontrastarmes E-Ink.",
+    hintOutput: "Wie das finale Graustufenbild entsteht. „Graustufen“ = Anzahl der Grautöne; „Dither“ = Muster für zusätzliche Töne.",
+    hintLevels: "Anzahl der Grautöne im Export. Weniger wirkt plakativ mit mehr Kontrast; 16 passt zu den meisten E-Ink-Panels; Voll = 256 Töne.",
+    hintDither: "Dithering täuscht zusätzliche Töne mit Punktmustern vor und vermeidet Streifen. Aus = flach; F-S = detailliert; Atk = sauber, E-Ink-freundlich; Bayer = Retro-Raster.",
+    hintInvert: "Vertauscht Hell und Dunkel — für Weiß-auf-Schwarz-Hintergründe.",
+    pan: "Verschieben",
   },
   ES: {
     title: "InkFrame", settings: "Ajustes", targetDevice: "Dispositivo", fillMode: "Escala",
@@ -51,6 +69,12 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Arrastra imágenes o haz clic", processing: "Procesando…",
     downloadAll: "ZIP", downloadBmp: "Descargar BMP", awaitingSignal: "Suelta una imagen para empezar",
     incomingStream: "Suelta para importar", releaseToProcess: "Suelta para procesar", bitDepth: "Formato",
+    hintTone: "Brillo, contraste y gama. «Auto contraste» estira el histograma a todo el rango — ideal para e-ink plano y de bajo contraste.",
+    hintOutput: "Cómo se construye la escala de grises final. «Grises» = cuántos tonos de gris; «Dither» = patrón para simular tonos extra.",
+    hintLevels: "Número de tonos de gris en la exportación. Menos da aspecto posterizado con más contraste; 16 coincide con la mayoría de e-ink; Completo = 256 tonos.",
+    hintDither: "El tramado simula tonos extra con patrones de puntos para evitar bandas. No = plano; F-S = detallado; Atk = limpio, ideal e-ink; Bayer = rejilla retro.",
+    hintInvert: "Intercambia claro y oscuro — para fondos blanco sobre negro.",
+    pan: "Mover",
   },
   FR: {
     title: "InkFrame", settings: "Paramètres", targetDevice: "Appareil", fillMode: "Échelle",
@@ -62,6 +86,12 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "Glissez des images ou cliquez", processing: "Traitement…",
     downloadAll: "ZIP", downloadBmp: "Télécharger BMP", awaitingSignal: "Déposez une image pour commencer",
     incomingStream: "Déposez pour importer", releaseToProcess: "Relâchez pour traiter", bitDepth: "Format",
+    hintTone: "Luminosité, contraste et gamma. « Auto contraste » étire l'histogramme sur toute la plage — idéal pour un e-ink plat et peu contrasté.",
+    hintOutput: "Comment le gris final est construit. « Gris » = nombre de niveaux de gris ; « Dither » = motif pour simuler des tons supplémentaires.",
+    hintLevels: "Nombre de niveaux de gris à l'export. Moins donne un rendu postérisé plus contrasté ; 16 correspond à la plupart des e-ink ; Complet = 256 tons.",
+    hintDither: "Le tramage simule des tons via des motifs de points pour éviter les bandes. Non = plat ; F-S = détaillé ; Atk = propre, adapté e-ink ; Bayer = grille rétro.",
+    hintInvert: "Inverse clair et foncé — pour les fonds blanc sur noir.",
+    pan: "Déplacer",
   },
   ZH: {
     title: "InkFrame", settings: "设置", targetDevice: "目标设备", fillMode: "缩放",
@@ -73,6 +103,12 @@ const TRANSLATIONS: Record<Language, any> = {
     dropHint: "拖入图片或点击选择", processing: "处理中…",
     downloadAll: "ZIP", downloadBmp: "下载 BMP", awaitingSignal: "拖入图片开始",
     incomingStream: "松开以导入", releaseToProcess: "松开以处理", bitDepth: "格式",
+    hintTone: "亮度、对比度和伽马。“自动对比”会把直方图拉伸到全范围——非常适合平淡、低对比的电子墨水屏。",
+    hintOutput: "最终灰度的生成方式。“灰阶”=灰色层级数量；“抖动”=用来模拟额外层级的图案。",
+    hintLevels: "导出图片的灰色层级数。越少越像海报化、对比更强；16 对应多数电子墨水屏；完整=256 级。",
+    hintDither: "抖动用细小点阵模拟更多层级，避免色带。关=平淡；F-S=细腻；Atk=干净、适合电子墨水；Bayer=复古网格。",
+    hintInvert: "黑白互换——用于白底黑字的壁纸。",
+    pan: "移动",
   }
 };
 
@@ -101,10 +137,23 @@ const getInitialOptions = (): GlobalOptions => {
 const formatBytes = (b: number): string =>
   b < 1024 ? `${b} B` : b < 1048576 ? `${(b / 1024).toFixed(0)} KB` : `${(b / 1048576).toFixed(2)} MB`;
 
-const Field = ({ label, right, children }: { label: string; right?: React.ReactNode; children: React.ReactNode }) => (
-  <div className="space-y-2">
-    <div className="flex items-center justify-between">
-      <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-[var(--text-mute)]">{label}</div>
+const HintIcon = ({ text }: { text: string }) => (
+  <span className="group/hint inline-flex align-middle" tabIndex={0} aria-label={text}>
+    <HelpCircle className="w-3.5 h-3.5 text-[var(--text-faint)] hover:text-[var(--text-dim)] cursor-help transition-colors" strokeWidth={1.75} />
+    {/* Spans the full field width (anchored to the relative Field) so it never clips against the panel overflow. */}
+    <span className="pointer-events-none absolute left-0 right-0 top-7 z-40 rounded-lg border border-[var(--border)] bg-[var(--panel)] p-2.5 text-[10px] leading-relaxed font-sans normal-case tracking-normal text-[var(--text-dim)] opacity-0 shadow-xl transition-opacity duration-150 group-hover/hint:opacity-100 group-focus/hint:opacity-100">
+      {text}
+    </span>
+  </span>
+);
+
+const Field = ({ label, hint, right, children }: { label: string; hint?: string; right?: React.ReactNode; children: React.ReactNode }) => (
+  <div className="space-y-2 relative">
+    <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center gap-1.5">
+        <span className="text-[10px] font-mono uppercase tracking-[0.18em] text-[var(--text-mute)]">{label}</span>
+        {hint && <HintIcon text={hint} />}
+      </div>
       {right}
     </div>
     {children}
@@ -112,12 +161,12 @@ const Field = ({ label, right, children }: { label: string; right?: React.ReactN
 );
 
 function Segmented<T extends string>({ value, options, onChange }: {
-  value: T; options: { value: T; label: React.ReactNode }[]; onChange: (v: T) => void;
+  value: T; options: { value: T; label: React.ReactNode; title?: string }[]; onChange: (v: T) => void;
 }) {
   return (
     <div className="grid gap-1 p-1 border rounded-lg bg-[var(--panel2)] border-[var(--border)]" style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}>
       {options.map(o => (
-        <button key={o.value} onClick={() => onChange(o.value)} aria-pressed={value === o.value}
+        <button key={o.value} onClick={() => onChange(o.value)} aria-pressed={value === o.value} title={o.title}
           className={`px-1.5 py-1.5 text-[11px] font-mono uppercase tracking-wider rounded-md transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
             value === o.value ? 'bg-[var(--active-bg)] text-[var(--active-text)] font-semibold shadow-sm' : 'text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--input)]'}`}>
           {o.label}
@@ -405,7 +454,7 @@ export default function App() {
               </Field>
             )}
 
-            <Field label={t.tone} right={
+            <Field label={t.tone} hint={t.hintTone} right={
               <button onClick={() => setOptions({ ...options, autoLevels: !options.autoLevels })} aria-pressed={options.autoLevels}
                 className={`px-2 py-0.5 rounded text-[9px] font-mono uppercase tracking-wider border transition-colors ${options.autoLevels ? 'bg-[var(--active-bg)] text-[var(--active-text)] border-[var(--active-bg)]' : 'border-[var(--border)] text-[var(--text-mute)] hover:text-[var(--text-dim)]'}`}>{t.autoContrast}</button>
             }>
@@ -416,13 +465,13 @@ export default function App() {
               </div>
             </Field>
 
-            <Field label={t.output}>
+            <Field label={t.output} hint={t.hintOutput}>
               <div className="space-y-2.5">
                 <Segmented value={String(options.grayLevels)} onChange={(v) => setOptions({ ...options, grayLevels: parseInt(v) })}
-                  options={[{ value: '256', label: t.full }, { value: '16', label: '16' }, { value: '4', label: '4' }, { value: '2', label: '2' }]} />
+                  options={[{ value: '256', label: t.full, title: t.hintLevels }, { value: '16', label: '16', title: t.hintLevels }, { value: '4', label: '4', title: t.hintLevels }, { value: '2', label: '2', title: t.hintLevels }]} />
                 <Segmented value={options.ditherMode} onChange={(v) => setOptions({ ...options, ditherMode: v as DitherMode })}
-                  options={[{ value: 'none', label: t.off }, { value: 'floyd', label: 'F-S' }, { value: 'atkinson', label: 'Atk' }, { value: 'bayer', label: 'Bayer' }]} />
-                <button onClick={() => setOptions({ ...options, invert: !options.invert })} aria-pressed={options.invert}
+                  options={[{ value: 'none', label: t.off, title: t.hintDither }, { value: 'floyd', label: 'F-S', title: t.hintDither }, { value: 'atkinson', label: 'Atk', title: t.hintDither }, { value: 'bayer', label: 'Bayer', title: t.hintDither }]} />
+                <button title={t.hintInvert} onClick={() => setOptions({ ...options, invert: !options.invert })} aria-pressed={options.invert}
                   className={`flex items-center justify-center gap-2 w-full p-2.5 border rounded-xl text-[11px] font-mono uppercase tracking-wider transition-all ${options.invert ? 'bg-[var(--active-bg)] border-[var(--active-bg)] text-[var(--active-text)] font-semibold' : 'bg-[var(--panel2)] border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--text-faint)] hover:text-[var(--text)]'}`}>
                   <span className={`w-2 h-2 rounded-full ${options.invert ? 'bg-[var(--active-text)]' : 'bg-[var(--text-faint)]'}`} />{t.invert}
                 </button>
@@ -437,13 +486,19 @@ export default function App() {
               {/* Toolbar */}
               <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 border-b border-[var(--border)] shrink-0">
                 <div className={`flex items-center gap-1.5 ${selectedSource && !selectedResult?.error ? '' : 'opacity-40 pointer-events-none'}`}>
-                  <ToolBtn onClick={() => updateAdjust({ rotate: (adjust.rotate + 270) % 360 })} label={t.reset + ' ⟲'}><RotateCcw className="w-4 h-4" /></ToolBtn>
+                  <ToolBtn onClick={() => updateAdjust({ rotate: (adjust.rotate + 270) % 360 })} label="Rotate ⟲"><RotateCcw className="w-4 h-4" /></ToolBtn>
                   <ToolBtn onClick={() => updateAdjust({ rotate: (adjust.rotate + 90) % 360 })} label="Rotate ⟳"><RotateCw className="w-4 h-4" /></ToolBtn>
                   <div className="w-px h-5 bg-[var(--border)] mx-1" />
                   <ZoomIn className="w-3.5 h-3.5 text-[var(--text-mute)]" />
                   <input type="range" min={50} max={200} step={1} value={adjust.scale} onChange={(e) => updateAdjust({ scale: parseInt(e.target.value) })}
                     className="w-20 sm:w-28 h-1.5 rounded-full appearance-none cursor-pointer bg-[var(--track)] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--active-bg)]" />
                   <span className="font-mono text-[11px] text-[var(--text-dim)] w-9 tabular-nums">{adjust.scale}%</span>
+                  <div className="w-px h-5 bg-[var(--border)] mx-1" />
+                  <ToolBtn onClick={() => updateAdjust({ panX: adjust.panX - 20 })} label={`${t.pan} ←`}><ArrowLeft className="w-3.5 h-3.5" /></ToolBtn>
+                  <ToolBtn onClick={() => updateAdjust({ panY: adjust.panY - 20 })} label={`${t.pan} ↑`}><ArrowUp className="w-3.5 h-3.5" /></ToolBtn>
+                  <ToolBtn onClick={() => updateAdjust({ panY: adjust.panY + 20 })} label={`${t.pan} ↓`}><ArrowDown className="w-3.5 h-3.5" /></ToolBtn>
+                  <ToolBtn onClick={() => updateAdjust({ panX: adjust.panX + 20 })} label={`${t.pan} →`}><ArrowRight className="w-3.5 h-3.5" /></ToolBtn>
+                  <div className="w-px h-5 bg-[var(--border)] mx-1" />
                   <ToolBtn onClick={() => updateAdjust({ ...DEFAULT_ADJUST })} label={t.reset}><RotateCcw className="w-3.5 h-3.5" /></ToolBtn>
                   {sourceFiles.length > 1 && <ToolBtn onClick={applyToAll} label={t.applyAll}><Copy className="w-3.5 h-3.5" /></ToolBtn>}
                   {selectedResult?.originalUrl && (
