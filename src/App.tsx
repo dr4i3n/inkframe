@@ -8,7 +8,7 @@ const LANGS: Language[] = ['EN', 'CS', 'DE', 'ES', 'FR', 'ZH'];
 
 const TRANSLATIONS: Record<Language, any> = {
   EN: {
-    title: "E-ink Convertor",
+    title: "InkFrame",
     format: "FORMAT: 24-BIT BMP",
     settings: "Settings",
     targetDevice: "Target Device",
@@ -46,7 +46,7 @@ const TRANSLATIONS: Record<Language, any> = {
     noValidImages: "No valid image files.",
   },
   CS: {
-    title: "Převodník pro E-ink",
+    title: "InkFrame",
     format: "FORMÁT: 24-BIT BMP",
     settings: "Nastavení",
     targetDevice: "Cílové zařízení",
@@ -84,7 +84,7 @@ const TRANSLATIONS: Record<Language, any> = {
     noValidImages: "Žádné platné obrázky.",
   },
   DE: {
-    title: "E-ink Konverter",
+    title: "InkFrame",
     format: "FORMAT: 24-BIT BMP",
     settings: "Einstellungen",
     targetDevice: "Zielgerät",
@@ -122,7 +122,7 @@ const TRANSLATIONS: Record<Language, any> = {
     noValidImages: "Keine gültigen Bilddateien.",
   },
   ES: {
-    title: "Convertidor E-ink",
+    title: "InkFrame",
     format: "FORMATO: 24-BIT BMP",
     settings: "Ajustes",
     targetDevice: "Dispositivo",
@@ -160,7 +160,7 @@ const TRANSLATIONS: Record<Language, any> = {
     noValidImages: "No hay imágenes válidas.",
   },
   FR: {
-    title: "Convertisseur E-ink",
+    title: "InkFrame",
     format: "FORMAT: 24-BIT BMP",
     settings: "Paramètres",
     targetDevice: "Appareil",
@@ -198,7 +198,7 @@ const TRANSLATIONS: Record<Language, any> = {
     noValidImages: "Aucune image valide.",
   },
   ZH: {
-    title: "电子墨水转换器",
+    title: "InkFrame",
     format: "格式: 24-BIT BMP",
     settings: "设置",
     targetDevice: "目标设备",
@@ -473,6 +473,7 @@ export default function App() {
           <div className="flex items-center gap-4 text-zinc-100">
             <Crosshair className="w-5 h-5 text-zinc-500" strokeWidth={1.5} />
             <h1 className="text-base sm:text-xl font-medium tracking-[0.2em] uppercase">{t.title}</h1>
+            <span className="hidden md:inline font-mono text-[10px] text-zinc-600 tracking-[0.2em] uppercase border-l border-zinc-800 pl-4">E-INK · X3 / X4</span>
           </div>
           <div className="font-mono text-xs text-zinc-400 flex flex-wrap gap-3 sm:gap-6 items-center">
 

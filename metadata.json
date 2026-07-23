@@ -1,6 +1,6 @@
 {
-  "name": "E-ink Konvertor",
-  "description": "Konvertor obrázků pro čtečky xteink X3 a X4 s optimalizací.",
+  "name": "InkFrame",
+  "description": "Konvertor a optimalizátor obrázků pro e-ink čtečky Xteink X3 a X4.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }
