@@ -7,7 +7,7 @@ for e-ink, and download a BMP sized exactly to the screen.
 **Everything runs locally in your browser — no upload, no account, no server.
 Your images never leave your machine.**
 
-🔗 **Live:** https://xteink-wallpaper-convertor-and-optimizer.vercel.app
+🔗 **Live:** https://useinkframe.vercel.app
 
 ## Features
 
