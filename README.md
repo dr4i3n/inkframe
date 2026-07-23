@@ -1,35 +1,50 @@
-# InkFrame — Xteink E‑ink Konvertor
+# InkFrame
 
-Konvertor a optimalizátor obrázků pro e‑ink čtečky **Xteink X3 a X4**. Nahraješ
-fotku, vyladíš ořez a vzhled a stáhneš BMP připravené na displej čtečky. Vše
-běží čistě v prohlížeči — žádný upload na server, obrázky neopouštějí zařízení.
+A free, in-browser tool to convert and optimize images into wallpapers for
+**Xteink X3 / X4 / X4 Pro** e-ink readers. Drop in an image, frame it, tune it
+for e-ink, and download a BMP sized exactly to the screen.
 
-## Funkce
+**Everything runs locally in your browser — no upload, no account, no server.
+Your images never leave your machine.**
 
-- **Cílová zařízení** — X4 (480×800) a X3 (528×792), pixel‑perfect na displej.
-- **Formát BMP** — 24‑bit nebo 8‑bit (indexovaná šeď, menší soubor).
-- **Vyplnění** — `Fill` (ořez do rámu) nebo `Contain` s pozadím: zrcadlení, černé, bílé.
-- **Úprava snímku (pro každý obrázek zvlášť)** — rotace po 90°, zoom, posun (pan) tažením v náhledu.
-- **Filtry** — jas, kontrast, invertování, Floyd–Steinberg dithering (počítaný ve floatu pro čistý výsledek).
-- **Dávka** — víc obrázků najednou, hromadné stažení jako jeden **ZIP**.
-- **Živý náhled** a odhad velikosti výstupního souboru.
-- **6 jazyků** (EN, CS, DE, ES, FR, ZH) s automatickou detekcí a uložením volby.
+🔗 **Live:** https://xteink-wallpaper-convertor-and-optimizer.vercel.app
 
-## Vývoj
+## Features
+
+**Devices**
+- X3 (528×792) and X4 / X4 Pro (480×800) — switching the target re-renders instantly.
+
+**Framing (per image)**
+- Fill or Contain, with a zoom slider and drag-to-reposition on the live preview.
+- Pan with arrow buttons, keyboard shortcuts, mouse wheel, or pinch-to-zoom on touch.
+- Rotate 90°. In batch mode every image keeps its own zoom / position / rotation.
+- Background for leftover space in Contain: black, white, or a mirrored tile.
+
+**Tone**
+- Brightness, contrast and gamma.
+- One-click auto-contrast (histogram stretch) for flat, low-contrast scans.
+- **⚡ Auto e-ink** preset applies a recommended combination in one tap.
+- Invert, and an A/B before/after compare.
+
+**Grayscale (built for e-ink)**
+- Choose 16 / 4 / 2 shades of gray — Xteink panels are 16-level, so 16 matches
+  the hardware exactly and the preview looks just like the device.
+- Dithering: Floyd–Steinberg, Atkinson, or Bayer (ordered).
+- Export as 8-bit grayscale (recommended, ~⅓ the size) or 24-bit BMP.
+
+**Workflow**
+- Batch mode — process many images at once, download the whole batch as a ZIP.
+- Light / dark theme, UI in six languages, contextual help on every control.
+
+## Development
 
 ```bash
 npm install
-npm run dev      # spustí Vite dev server na http://localhost:3000
-npm run build    # produkční build do dist/
-npm run preview  # náhled produkčního buildu
-npm run lint     # typová kontrola (tsc --noEmit)
+npm run dev      # Vite dev server at http://localhost:3000
+npm run build    # production build to dist/
+npm run preview  # preview the production build
+npm run lint     # type-check (tsc --noEmit)
 ```
-
-## Nasazení
-
-Statická Vite aplikace — nasaditelná kamkoli (Vercel, Netlify, GitHub Pages…).
-Na Vercelu stačí naimportovat repozitář; framework se detekuje automaticky
-(build `vite build`, výstup `dist`).
 
 ## Docker
 
@@ -41,15 +56,18 @@ docker run --rm -p 8080:80 inkframe
 # open http://localhost:8080
 ```
 
-## Struktura
+## Tech
 
-```
-src/
-  App.tsx                 UI, stav, překlady
-  lib/imageProcessor.ts   canvas pipeline + BMP enkodér
-  lib/zip.ts              minimální ZIP writer (bez závislostí)
-```
+React 19 · TypeScript · Vite · Tailwind CSS. The image pipeline (scaling,
+framing, grayscale, dithering and BMP encoding) runs entirely on a canvas in
+the browser; `src/lib/zip.ts` is a small dependency-free ZIP writer.
 
-## Licence
+## Deployment
 
-Osobní projekt. Podpořit lze přes [Buy me a coffee](https://buymeacoffee.com/destroywrld).
+Static Vite app — deploy anywhere (Vercel, Netlify, GitHub Pages…). On Vercel
+just import the repo; the framework is auto-detected (build `vite build`,
+output `dist`).
+
+## License
+
+[MIT](LICENSE) — free to use, modify and share.
