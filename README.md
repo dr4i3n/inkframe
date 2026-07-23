@@ -31,6 +31,16 @@ Statická Vite aplikace — nasaditelná kamkoli (Vercel, Netlify, GitHub Pages�
 Na Vercelu stačí naimportovat repozitář; framework se detekuje automaticky
 (build `vite build`, výstup `dist`).
 
+## Docker
+
+Runs as a static site behind nginx — no backend, nothing leaves the container.
+
+```bash
+docker build -t inkframe .
+docker run --rm -p 8080:80 inkframe
+# open http://localhost:8080
+```
+
 ## Struktura
 
 ```
