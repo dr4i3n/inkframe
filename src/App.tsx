@@ -310,7 +310,7 @@ export default function App() {
     invert: false,
     dither: false,
     backgroundFill: 'mirror',
-    bitDepth: 24,
+    bitDepth: 8,
     brightness: 0,
     contrast: 0,
   });
