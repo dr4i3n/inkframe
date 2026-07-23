@@ -116,7 +116,7 @@ interface SourceFile { id: string; file: File; adjust: Adjust; }
 interface Result extends Partial<ProcessedImage> { id: string; originalName: string; error?: boolean; }
 
 const DEFAULT_OPTIONS: GlobalOptions = {
-  device: 'X4', fitMode: 'cover', invert: false,
+  device: 'X3', fitMode: 'cover', invert: false,
   brightness: 0, contrast: 0, gamma: 1, autoLevels: false,
   grayLevels: 256, ditherMode: 'none', backgroundFill: 'mirror', bitDepth: 8,
 };
@@ -433,7 +433,7 @@ export default function App() {
 
             <Field label={t.targetDevice}>
               <Segmented value={options.device} onChange={(device) => setOptions({ ...options, device })}
-                options={(['X4', 'X3'] as DeviceType[]).map(d => ({ value: d, label: <span className="flex flex-col leading-tight"><span>{d}</span><span className="text-[8px] opacity-60">{DEVICES[d].width}×{DEVICES[d].height}</span></span> }))} />
+                options={(['X3', 'X4'] as DeviceType[]).map(d => ({ value: d, label: <span className="flex flex-col leading-tight"><span>{d}</span><span className="text-[8px] opacity-60">{DEVICES[d].width}×{DEVICES[d].height}</span></span> }))} />
             </Field>
 
             <div className="grid grid-cols-2 gap-4">
