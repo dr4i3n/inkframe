@@ -1,0 +1,6 @@
+{
+  "name": "E-ink Konvertor",
+  "description": "Konvertor obrázků pro čtečky xteink X3 a X4 s optimalizací.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
