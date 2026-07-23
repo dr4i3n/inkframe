@@ -27,8 +27,9 @@ Your images never leave your machine.**
 - Invert, and an A/B before/after compare.
 
 **Grayscale (built for e-ink)**
-- Choose 16 / 4 / 2 shades of gray — Xteink panels are 16-level, so 16 matches
-  the hardware exactly and the preview looks just like the device.
+- Choose 16 / 4 / 2 shades of gray — the X4 / X4 Pro panel is 4-level grayscale
+  (use 4) and the X3 firmware only shows black & white (use 2); the app marks the
+  right one for the selected device.
 - Dithering: Floyd–Steinberg, Atkinson, or Bayer (ordered).
 - Export as 8-bit grayscale (recommended, ~⅓ the size) or 24-bit BMP.
 

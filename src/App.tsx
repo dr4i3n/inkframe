@@ -20,7 +20,7 @@ const TRANSLATIONS: Record<Language, any> = {
     incomingStream: "Drop to import", releaseToProcess: "Release to process", bitDepth: "Format",
     hintTone: "Rescues a flat or dark image before export. Auto contrast automatically pins the darkest tone to black and the lightest to white; Gamma brightens or darkens the midtones; Brightness and Contrast are manual fine-tuning.",
     hintOutput: "Builds the final black-and-white image: how many shades of gray it keeps, and the dot pattern used to simulate the shades in between.",
-    hintLevels: "Shades of gray in the export. Xteink screens show 16 shades — so 16 is the sweet spot and previews exactly like the device. 4 or 2 give a bold, posterized look. Full (256) lets the reader convert it itself.",
+    hintLevels: "Shades of gray in the export. The X4 / X4 Pro panel is 4-level grayscale (use 4); the X3 only shows black & white (use 2). Dithering keeps photos smooth at these low levels. 16 or Full hold more detail, but the reader down-samples anyway — the ⭐ marks the best match for the selected device.",
     hintDither: "Simulates in-between shades with tiny dot patterns so photos look smooth instead of striped. Off = flat blocks (best for logos and text). F-S = sharp and detailed. Atkinson = cleaner with more punch, the classic e-ink look. Bayer = even retro grid.",
     hintInvert: "Swaps light and dark — for a dark-themed wallpaper, or to fix a scan that came out as a negative.",
     pan: "Move",
@@ -37,7 +37,7 @@ const TRANSLATIONS: Record<Language, any> = {
     incomingStream: "Pusť pro import", releaseToProcess: "Pusť pro zpracování", bitDepth: "Formát",
     hintTone: "Vytáhne plochý nebo tmavý obrázek před exportem. Auto kontrast automaticky posadí nejtmavší tón na černou a nejsvětlejší na bílou; Gama zesvětlí nebo ztmaví střední tóny; Jas a Kontrast jsou ruční doladění.",
     hintOutput: "Sestaví finální černobílý obrázek: kolik odstínů šedi si nechá a jakým vzorem bodů se dopočítají mezistupně.",
-    hintLevels: "Kolik odstínů šedi má výstup. Displeje Xteink zobrazí 16 odstínů — proto je 16 ideál a náhled vypadá přesně jako na čtečce. 4 nebo 2 dají výrazný, plakátový vzhled. Plné (256) nechá převod na čtečce.",
+    hintLevels: "Kolik odstínů šedi má výstup. Panel X4 / X4 Pro je 4úrovňový (použij 4); X3 zobrazí jen černobílou (použij 2). Dithering udrží fotky plynulé i při těchhle nízkých úrovních. 16 nebo Plné mají víc detailů, ale čtečka je stejně převede — ⭐ značí nejlepší volbu pro vybrané zařízení.",
     hintDither: "Dopočítá mezistupně drobným rozptylem bodů, aby fotky byly plynulé a ne pruhované. Vyp = ploché plochy (ideál pro loga a text). F-S = ostrý, detailní. Atkinson = čistší a údernější, klasický e-ink vzhled. Bayer = pravidelný retro rastr.",
     hintInvert: "Prohodí světlou a tmavou — pro tapetu v tmavém motivu, nebo když sken vyšel jako negativ.",
     pan: "Posun",
@@ -54,7 +54,7 @@ const TRANSLATIONS: Record<Language, any> = {
     incomingStream: "Zum Importieren ablegen", releaseToProcess: "Loslassen zum Verarbeiten", bitDepth: "Format",
     hintTone: "Hebt ein flaches oder dunkles Bild vor dem Export an. Auto-Kontrast setzt automatisch den dunkelsten Ton auf Schwarz und den hellsten auf Weiß; Gamma hellt die Mitteltöne auf oder ab; Helligkeit und Kontrast sind manuelle Feinabstimmung.",
     hintOutput: "Erzeugt das finale Schwarz-Weiß-Bild: wie viele Graustufen es behält und mit welchem Punktmuster die Zwischentöne simuliert werden.",
-    hintLevels: "Graustufen im Export. Xteink-Displays zeigen 16 Stufen — daher ist 16 optimal und die Vorschau sieht genau wie am Gerät aus. 4 oder 2 wirken plakativ. Voll (256) überlässt die Umwandlung dem Reader.",
+    hintLevels: "Graustufen im Export. Das X4 / X4 Pro Panel ist 4-stufig (nutze 4); das X3 zeigt nur Schwarz-Weiß (nutze 2). Dithering hält Fotos bei diesen niedrigen Stufen glatt. 16 oder Voll behalten mehr Details, aber der Reader rechnet ohnehin herunter — ⭐ markiert die beste Wahl fürs gewählte Gerät.",
     hintDither: "Simuliert Zwischentöne mit feinen Punktmustern, damit Fotos glatt statt streifig wirken. Aus = flache Flächen (ideal für Logos und Text). F-S = scharf, detailliert. Atkinson = sauberer mit mehr Kontrast, der klassische E-Ink-Look. Bayer = gleichmäßiges Retro-Raster.",
     hintInvert: "Vertauscht Hell und Dunkel — für ein dunkles Wallpaper oder um einen negativen Scan zu korrigieren.",
     pan: "Verschieben",
@@ -71,7 +71,7 @@ const TRANSLATIONS: Record<Language, any> = {
     incomingStream: "Suelta para importar", releaseToProcess: "Suelta para procesar", bitDepth: "Formato",
     hintTone: "Recupera una imagen plana u oscura antes de exportar. Auto contraste lleva el tono más oscuro a negro y el más claro a blanco automáticamente; Gama aclara u oscurece los medios tonos; Brillo y Contraste son ajuste manual.",
     hintOutput: "Crea la imagen final en blanco y negro: cuántos tonos de gris conserva y el patrón de puntos que simula los tonos intermedios.",
-    hintLevels: "Tonos de gris en la exportación. Las pantallas Xteink muestran 16 tonos — por eso 16 es lo ideal y la vista previa se ve igual que en el dispositivo. 4 o 2 dan un aspecto posterizado. Completo (256) deja la conversión al lector.",
+    hintLevels: "Tonos de gris en la exportación. El panel X4 / X4 Pro es de 4 niveles (usa 4); el X3 solo muestra blanco y negro (usa 2). El tramado mantiene las fotos suaves en estos niveles bajos. 16 o Completo guardan más detalle, pero el lector reduce igualmente — ⭐ marca la mejor opción para el dispositivo elegido.",
     hintDither: "Simula tonos intermedios con patrones de puntos para que las fotos se vean suaves y no a franjas. No = bloques planos (ideal para logos y texto). F-S = nítido y detallado. Atkinson = más limpio y con más fuerza, el look clásico e-ink. Bayer = rejilla retro uniforme.",
     hintInvert: "Intercambia claro y oscuro — para un fondo oscuro o para corregir un escaneo en negativo.",
     pan: "Mover",
@@ -88,7 +88,7 @@ const TRANSLATIONS: Record<Language, any> = {
     incomingStream: "Déposez pour importer", releaseToProcess: "Relâchez pour traiter", bitDepth: "Format",
     hintTone: "Récupère une image plate ou sombre avant l'export. Auto contraste place le ton le plus foncé sur le noir et le plus clair sur le blanc automatiquement ; Gamma éclaircit ou assombrit les tons moyens ; Luminosité et Contraste sont un réglage manuel.",
     hintOutput: "Construit l'image finale en noir et blanc : combien de niveaux de gris elle conserve et le motif de points qui simule les tons intermédiaires.",
-    hintLevels: "Niveaux de gris à l'export. Les écrans Xteink affichent 16 niveaux — donc 16 est idéal et l'aperçu ressemble exactement à l'appareil. 4 ou 2 donnent un rendu postérisé. Complet (256) laisse la conversion au lecteur.",
+    hintLevels: "Niveaux de gris à l'export. L'écran X4 / X4 Pro est en 4 niveaux (utilisez 4) ; le X3 n'affiche que du noir et blanc (utilisez 2). Le tramage garde les photos lisses à ces faibles niveaux. 16 ou Complet gardent plus de détail, mais le lecteur réduit de toute façon — ⭐ indique le meilleur choix pour l'appareil sélectionné.",
     hintDither: "Simule des tons intermédiaires avec de petits motifs de points pour que les photos soient lisses et non striées. Non = aplats (idéal pour logos et texte). F-S = net et détaillé. Atkinson = plus propre et contrasté, le look e-ink classique. Bayer = grille rétro régulière.",
     hintInvert: "Inverse clair et foncé — pour un fond sombre ou corriger un scan en négatif.",
     pan: "Déplacer",
@@ -105,7 +105,7 @@ const TRANSLATIONS: Record<Language, any> = {
     incomingStream: "松开以导入", releaseToProcess: "松开以处理", bitDepth: "格式",
     hintTone: "导出前提亮平淡或偏暗的图片。自动对比会自动把最暗的色调压到纯黑、最亮的提到纯白；伽马提亮或压暗中间调；亮度和对比度用于手动微调。",
     hintOutput: "生成最终的黑白图像：保留多少灰阶，以及用什么点阵图案模拟中间色调。",
-    hintLevels: "导出图片的灰阶数量。Xteink 屏幕显示 16 级灰阶——所以 16 最合适，预览与设备完全一致。4 或 2 会得到海报化的强对比。完整（256）则让阅读器自己转换。",
+    hintLevels: "导出的灰阶数。X4 / X4 Pro 面板是 4 级灰阶（用 4）；X3 只显示黑白（用 2）。抖动能让照片在这些低层级下保持平滑。16 或完整保留更多细节，但阅读器仍会降采样——⭐ 标记所选设备的最佳选项。",
     hintDither: "用细小点阵模拟中间色调，让照片平滑而不出现条带。关=平涂色块（适合徽标和文字）。F-S=锐利、细节多。Atkinson=更干净、更有力，经典电子墨水风格。Bayer=均匀的复古网格。",
     hintInvert: "黑白互换——用于深色壁纸，或修正扫描出的负片。",
     pan: "移动",
@@ -238,6 +238,8 @@ export default function App() {
   const selectedResult = selectedSource ? results.find(r => r.id === selectedSource.id) ?? null : null;
   const validCount = results.filter(r => r.bmpBlob).length;
   const dev = DEVICES[options.device];
+  // X4/X4 Pro panels are 4-level grayscale; the X3 firmware only shows 1-bit B&W.
+  const recLevels = options.device === 'X3' ? 2 : 4;
 
   const updateAdjust = useCallback((patch: Partial<Adjust>) => {
     setSourceFiles(prev => prev.map((s, i) => i === selectedIndex ? { ...s, adjust: { ...s.adjust, ...patch } } : s));
@@ -426,7 +428,7 @@ export default function App() {
               <h2 className="font-mono text-[11px] uppercase tracking-[0.18em] font-semibold">{t.settings}</h2>
             </div>
 
-            <button onClick={() => setOptions(o => ({ ...o, autoLevels: true, grayLevels: 16, ditherMode: 'atkinson', gamma: 1, brightness: 0, contrast: 0 }))}
+            <button onClick={() => setOptions(o => ({ ...o, autoLevels: true, grayLevels: o.device === 'X3' ? 2 : 4, ditherMode: 'atkinson', gamma: 1, brightness: 0, contrast: 0 }))}
               className="flex items-center justify-center gap-2 w-full py-2 rounded-xl border border-[var(--border)] bg-[var(--panel2)] text-[var(--text)] text-[11px] font-mono uppercase tracking-widest hover:border-[var(--text-faint)] transition-colors">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />{t.preset}
             </button>
@@ -468,12 +470,13 @@ export default function App() {
             <Field label={t.output} hint={t.hintOutput}>
               <div className="space-y-2.5">
                 <Segmented value={String(options.grayLevels)} onChange={(v) => setOptions({ ...options, grayLevels: parseInt(v) })}
-                  options={[
-                    { value: '256', label: t.full, title: t.hintLevels },
-                    { value: '16', label: <span className="flex items-center gap-1">16<span className="w-1.5 h-1.5 rounded-full bg-amber-500" /></span>, title: `★ ${t.hintLevels}` },
-                    { value: '4', label: '4', title: t.hintLevels },
-                    { value: '2', label: '2', title: t.hintLevels },
-                  ]} />
+                  options={[256, 16, 4, 2].map(n => ({
+                    value: String(n),
+                    label: n === 256 ? t.full : (n === recLevels
+                      ? <span className="flex items-center gap-1">{n}<span className="w-1.5 h-1.5 rounded-full bg-amber-500" /></span>
+                      : String(n)),
+                    title: n === recLevels ? `★ ${t.hintLevels}` : t.hintLevels,
+                  }))} />
                 <Segmented value={options.ditherMode} onChange={(v) => setOptions({ ...options, ditherMode: v as DitherMode })}
                   options={[{ value: 'none', label: t.off, title: t.hintDither }, { value: 'floyd', label: 'F-S', title: t.hintDither }, { value: 'atkinson', label: <span className="flex items-center gap-1">Atk<span className="w-1.5 h-1.5 rounded-full bg-amber-500" /></span>, title: `★ ${t.hintDither}` }, { value: 'bayer', label: 'Bayer', title: t.hintDither }]} />
                 <button title={t.hintInvert} onClick={() => setOptions({ ...options, invert: !options.invert })} aria-pressed={options.invert}
