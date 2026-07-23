@@ -443,7 +443,7 @@ export default function App() {
               </Field>
               <Field label={t.bitDepth}>
                 <Segmented value={String(options.bitDepth)} onChange={(v) => setOptions({ ...options, bitDepth: parseInt(v) as 8 | 24 })}
-                  options={[{ value: '8', label: '8-bit' }, { value: '24', label: '24-bit' }]} />
+                  options={[{ value: '8', label: <span className="flex items-center gap-1">8-bit<span className="w-1.5 h-1.5 rounded-full bg-amber-500" /></span> }, { value: '24', label: '24-bit' }]} />
               </Field>
             </div>
 
@@ -475,7 +475,7 @@ export default function App() {
                     { value: '2', label: '2', title: t.hintLevels },
                   ]} />
                 <Segmented value={options.ditherMode} onChange={(v) => setOptions({ ...options, ditherMode: v as DitherMode })}
-                  options={[{ value: 'none', label: t.off, title: t.hintDither }, { value: 'floyd', label: 'F-S', title: t.hintDither }, { value: 'atkinson', label: 'Atk', title: t.hintDither }, { value: 'bayer', label: 'Bayer', title: t.hintDither }]} />
+                  options={[{ value: 'none', label: t.off, title: t.hintDither }, { value: 'floyd', label: 'F-S', title: t.hintDither }, { value: 'atkinson', label: <span className="flex items-center gap-1">Atk<span className="w-1.5 h-1.5 rounded-full bg-amber-500" /></span>, title: `★ ${t.hintDither}` }, { value: 'bayer', label: 'Bayer', title: t.hintDither }]} />
                 <button title={t.hintInvert} onClick={() => setOptions({ ...options, invert: !options.invert })} aria-pressed={options.invert}
                   className={`flex items-center justify-center gap-2 w-full p-2.5 border rounded-xl text-[11px] font-mono uppercase tracking-wider transition-all ${options.invert ? 'bg-[var(--active-bg)] border-[var(--active-bg)] text-[var(--active-text)] font-semibold' : 'bg-[var(--panel2)] border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--text-faint)] hover:text-[var(--text)]'}`}>
                   <span className={`w-2 h-2 rounded-full ${options.invert ? 'bg-[var(--active-text)]' : 'bg-[var(--text-faint)]'}`} />{t.invert}
