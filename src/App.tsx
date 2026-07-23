@@ -421,17 +421,28 @@ export default function App() {
     setTimeout(() => URL.revokeObjectURL(url), 2000);
   };
 
-  const handlePreviewMouseDown = (e: React.MouseEvent) => {
+  // Pointer events cover mouse, touch and pen with one code path.
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (!selectedSource) return;
     e.preventDefault();
+    try { (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); } catch { /* ignore */ }
     setIsPreviewDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
   };
-  const handlePreviewMouseMove = (e: React.MouseEvent) => {
+  const handlePointerMove = (e: React.PointerEvent) => {
     if (!isPreviewDragging) return;
     updateAdjust({ panX: adjust.panX + (e.clientX - dragStart.x), panY: adjust.panY + (e.clientY - dragStart.y) });
     setDragStart({ x: e.clientX, y: e.clientY });
   };
-  const handlePreviewMouseUp = () => setIsPreviewDragging(false);
+  const handlePointerUp = (e: React.PointerEvent) => {
+    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+    setIsPreviewDragging(false);
+  };
+  const handleWheel = (e: React.WheelEvent) => {
+    if (!selectedSource) return;
+    const next = Math.min(200, Math.max(50, adjust.scale + (e.deltaY < 0 ? 4 : -4)));
+    updateAdjust({ scale: next });
+  };
 
   const selectedResult = selectedSource ? results.find(r => r.id === selectedSource.id) ?? null : null;
   const validCount = results.filter(r => r.bmpBlob).length;
@@ -630,12 +641,13 @@ export default function App() {
                 ) : selectedResult?.dataUrl ? (
                   <>
                     <div
-                      className={`relative bg-white shadow-[0_10px_60px_rgba(0,0,0,0.6)] ring-1 ring-white/10 rounded-[2px] transition-transform z-10 overflow-hidden ${isPreviewDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+                      className={`relative bg-white shadow-[0_10px_60px_rgba(0,0,0,0.6)] ring-1 ring-white/10 rounded-[2px] transition-transform z-10 overflow-hidden touch-none ${isPreviewDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
                       style={{ aspectRatio: `${dev.width} / ${dev.height}`, maxHeight: '100%', maxWidth: '100%' }}
-                      onMouseDown={handlePreviewMouseDown}
-                      onMouseMove={handlePreviewMouseMove}
-                      onMouseUp={handlePreviewMouseUp}
-                      onMouseLeave={handlePreviewMouseUp}
+                      onPointerDown={handlePointerDown}
+                      onPointerMove={handlePointerMove}
+                      onPointerUp={handlePointerUp}
+                      onPointerCancel={handlePointerUp}
+                      onWheel={handleWheel}
                     >
                       <img src={selectedResult.dataUrl} className="block w-full h-full object-cover pointer-events-none select-none" alt={selectedResult.originalName} draggable={false} />
                     </div>
