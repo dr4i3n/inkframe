@@ -118,7 +118,7 @@ interface Result extends Partial<ProcessedImage> { id: string; originalName: str
 const DEFAULT_OPTIONS: GlobalOptions = {
   device: 'X3', fitMode: 'cover', invert: false,
   brightness: 0, contrast: 0, gamma: 1, autoLevels: false,
-  grayLevels: 256, ditherMode: 'none', backgroundFill: 'mirror', bitDepth: 8,
+  grayLevels: 256, ditherMode: 'atkinson', backgroundFill: 'mirror', bitDepth: 8,
 };
 
 const getInitialLang = (): Language => {
