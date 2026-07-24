@@ -27,9 +27,11 @@ Your images never leave your machine.**
 - Invert, and an A/B before/after compare.
 
 **Grayscale (built for e-ink)**
-- Choose 16 / 4 / 2 shades of gray — the X4 / X4 Pro panel is 4-level grayscale
-  (use 4) and the X3 firmware only shows black & white (use 2); the app marks the
-  right one for the selected device.
+- Grayscale output: **Full 8-bit** is best for photos and art — send the reader a
+  clean grayscale image and let its firmware do the high-quality dithering onto the
+  panel itself (that's how the built-in wallpapers look smooth). The 16 / 4 / 2
+  levels and the dithering modes are there for deliberately stylized
+  (posterized / halftone) looks.
 - Dithering: Floyd–Steinberg, Atkinson, or Bayer (ordered).
 - Export as 8-bit grayscale (recommended, ~⅓ the size) or 24-bit BMP.
 
